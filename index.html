@@ -14,7 +14,7 @@
 
     <script>
         // Fetch CSV data and create a Plotly figure
-        fetch('data/data.csv')
+        fetch('path/to/your/data.csv')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to fetch CSV data (HTTP ${response.status})`);
@@ -40,13 +40,13 @@
                 const lines = csv.split('\n');
                 const header = lines[0].split(',');
 
-                const data = header.slice(1).map((_, index) => {
+                const data = header.slice(1).map((colName, index) => {
                     return {
                         x: [],
                         y: [],
-                        name: header[index + 1].trim(), // Assumes the first column is x-axis and rest are y-axis
-                        type: 'scatter',
                         mode: 'lines+markers',
+                        name: colName.trim(),
+                        type: 'scatter',
                     };
                 });
 
