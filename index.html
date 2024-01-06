@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic GitHub Pages</title>
+
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+    <div id="plotly-figure"></div>
+
+    <script>
+        // Fetch CSV data and create a Plotly figure
+        fetch('data.csv')
+            .then(response => response.text())
+            .then(data => {
+                const parsedData = parseCSV(data); // You need to implement the CSV parsing function
+                const figure = createPlotlyFigure(parsedData);
+                Plotly.newPlot('plotly-figure', figure);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        // Function to parse CSV data (you may need to customize this based on your CSV structure)
+        function parseCSV(csv) {
+            // Implement your CSV parsing logic here
+            // Example: Use a library like PapaParse or manually split and process the CSV
+        }
+
+        // Function to create a Plotly figure based on parsed data
+        function createPlotlyFigure(data) {
+            // Implement your figure creation logic using Plotly
+            // Example: Scatter plot with data
+            const figure = {
+                data: [{
+                    x: data.x,
+                    y: data.y,
+                    mode: 'markers',
+                    type: 'scatter',
+                }],
+                layout: {
+                    title: 'Dynamic Figure',
+                    xaxis: { title: 'X-axis' },
+                    yaxis: { title: 'Y-axis' },
+                }
+            };
+            return figure;
+        }
+    </script>
+
+</body>
+</html>
