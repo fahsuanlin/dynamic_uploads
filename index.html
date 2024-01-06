@@ -14,7 +14,7 @@
 
     <script>
         // Fetch CSV data and create a Plotly figure
-        fetch('path/to/your/data.csv')
+        fetch('data/data.csv')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Failed to fetch CSV data (HTTP ${response.status})`);
@@ -74,6 +74,7 @@
                         title: 'Dynamic Figure',
                         xaxis: { title: 'X-axis' },
                         yaxis: { title: 'Y-axis' },
+                        legend: { orientation: 'h' } // 'h' for horizontal, 'v' for vertical
                     }
                 };
                 return figure;
