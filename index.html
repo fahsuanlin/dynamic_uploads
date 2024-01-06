@@ -15,7 +15,12 @@
 <script>
     // Fetch CSV data and create a Plotly figure
     fetch('path/to/your/data.csv')
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch CSV data (HTTP ${response.status})`);
+            }
+            return response.text();
+        })
         .then(data => {
             const parsedData = parseCSV(data); // You need to implement the CSV parsing function
 
@@ -31,30 +36,45 @@
 
     // Function to parse CSV data (you may need to customize this based on your CSV structure)
     function parseCSV(csv) {
-        // Implement your CSV parsing logic here
-        // Example: Use a library like PapaParse or manually split and process the CSV
+        try {
+            // Implement your CSV parsing logic here
+            // Example: Use a library like PapaParse or manually split and process the CSV
+            return {
+                x: [1, 2, 3], // Replace with your parsed X data
+                y: [4, 5, 6], // Replace with your parsed Y data
+            };
+        } catch (error) {
+            console.error('Error parsing CSV:', error);
+            return null;
+        }
     }
 
     // Function to create a Plotly figure based on parsed data
     function createPlotlyFigure(data) {
-        // Implement your figure creation logic using Plotly
-        // Example: Scatter plot with data
-        const figure = {
-            data: [{
-                x: data.x,
-                y: data.y,
-                mode: 'markers',
-                type: 'scatter',
-            }],
-            layout: {
-                title: 'Dynamic Figure',
-                xaxis: { title: 'X-axis' },
-                yaxis: { title: 'Y-axis' },
-            }
-        };
-        return figure;
+        try {
+            // Implement your figure creation logic using Plotly
+            // Example: Scatter plot with data
+            const figure = {
+                data: [{
+                    x: data.x,
+                    y: data.y,
+                    mode: 'markers',
+                    type: 'scatter',
+                }],
+                layout: {
+                    title: 'Dynamic Figure',
+                    xaxis: { title: 'X-axis' },
+                    yaxis: { title: 'Y-axis' },
+                }
+            };
+            return figure;
+        } catch (error) {
+            console.error('Error creating Plotly figure:', error);
+            return null;
+        }
     }
 </script>
+
 
 
 </body>
