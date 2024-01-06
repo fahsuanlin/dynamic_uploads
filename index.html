@@ -12,80 +12,77 @@
 
     <div id="plotly-figure"></div>
 
-<script>
-    // Fetch CSV data and create a Plotly figure
-    fetch('data/data.csv')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Failed to fetch CSV data (HTTP ${response.status})`);
-            }
-            return response.text();
-        })
-        .then(data => {
-            const parsedData = parseCSV(data); // You need to implement the CSV parsing function
-
-            // Check if parsedData is not undefined before creating the figure
-            if (parsedData) {
-                const figure = createPlotlyFigure(parsedData);
-                Plotly.newPlot('plotly-figure', figure);
-            } else {
-                console.error('Error parsing CSV data.');
-            }
-        })
-        .catch(error => console.error('Error fetching data:', error));
-
-    // Function to parse CSV data (you may need to customize this based on your CSV structure)
-    function parseCSV(csv) {
-        try {
-            // Implement your CSV parsing logic here
-            // Example: Use a library like PapaParse or manually split and process the CSV
-
-            // Example: Assuming a simple CSV structure with two columns
-            const lines = csv.split('\n');
-            const x = [];
-            const y = [];
-
-            for (const line of lines) {
-                const values = line.split(',');
-                if (values.length === 2) {
-                    x.push(parseFloat(values[0].trim()));
-                    y.push(parseFloat(values[1].trim()));
+    <script>
+        // Fetch CSV data and create a Plotly figure
+        fetch('data/data.csv')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch CSV data (HTTP ${response.status})`);
                 }
-            }
+                return response.text();
+            })
+            .then(data => {
+                const parsedData = parseCSV(data); // You need to implement the CSV parsing function
 
-            return { x, y };
-        } catch (error) {
-            console.error('Error parsing CSV:', error);
-            return null;
-        }
-    }
-
-    // Function to create a Plotly figure based on parsed data
-    function createPlotlyFigure(data) {
-        try {
-            // Implement your figure creation logic using Plotly
-            // Example: Scatter plot with data
-            const figure = {
-                data: [{
-                    x: data.x,
-                    y: data.y,
-                    mode: 'markers',
-                    type: 'scatter',
-                }],
-                layout: {
-                    title: 'Dynamic Figure',
-                    xaxis: { title: 'X-axis' },
-                    yaxis: { title: 'Y-axis' },
+                // Check if parsedData is not undefined before creating the figure
+                if (parsedData) {
+                    const figure = createPlotlyFigure(parsedData);
+                    Plotly.newPlot('plotly-figure', figure);
+                } else {
+                    console.error('Error parsing CSV data.');
                 }
-            };
-            return figure;
-        } catch (error) {
-            console.error('Error creating Plotly figure:', error);
-            return null;
-        }
-    }
-</script>
+            })
+            .catch(error => console.error('Error fetching data:', error));
 
+        // Function to parse CSV data (you may need to customize this based on your CSV structure)
+        function parseCSV(csv) {
+            try {
+                const lines = csv.split('\n');
+                const header = lines[0].split(',');
+
+                const data = header.slice(1).map((_, index) => {
+                    return {
+                        x: [],
+                        y: [],
+                        name: header[index + 1].trim(), // Assumes the first column is x-axis and rest are y-axis
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                    };
+                });
+
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',');
+                    for (let j = 1; j < values.length; j++) {
+                        data[j - 1].x.push(parseFloat(values[0].trim()));
+                        data[j - 1].y.push(parseFloat(values[j].trim()));
+                    }
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Error parsing CSV:', error);
+                return null;
+            }
+        }
+
+        // Function to create a Plotly figure based on parsed data
+        function createPlotlyFigure(data) {
+            try {
+                const figure = {
+                    data: data,
+                    layout: {
+                        title: 'Dynamic Figure',
+                        xaxis: { title: 'X-axis' },
+                        yaxis: { title: 'Y-axis' },
+                    }
+                };
+                return figure;
+            } catch (error) {
+                console.error('Error creating Plotly figure:', error);
+                return null;
+            }
+        }
+    </script>
 
 </body>
 </html>
