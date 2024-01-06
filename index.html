@@ -14,7 +14,7 @@
 
     <script>
         // Fetch CSV data and create a Plotly figure
-        fetch('data.csv')
+        fetch('./data.csv')
             .then(response => response.text())
             .then(data => {
                 const parsedData = parseCSV(data); // You need to implement the CSV parsing function
