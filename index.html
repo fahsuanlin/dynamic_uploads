@@ -39,10 +39,21 @@
         try {
             // Implement your CSV parsing logic here
             // Example: Use a library like PapaParse or manually split and process the CSV
-            return {
-                x: [1, 2, 3], // Replace with your parsed X data
-                y: [4, 5, 6], // Replace with your parsed Y data
-            };
+
+            // Example: Assuming a simple CSV structure with two columns
+            const lines = csv.split('\n');
+            const x = [];
+            const y = [];
+
+            for (const line of lines) {
+                const values = line.split(',');
+                if (values.length === 2) {
+                    x.push(parseFloat(values[0].trim()));
+                    y.push(parseFloat(values[1].trim()));
+                }
+            }
+
+            return { x, y };
         } catch (error) {
             console.error('Error parsing CSV:', error);
             return null;
@@ -74,7 +85,6 @@
         }
     }
 </script>
-
 
 
 </body>
